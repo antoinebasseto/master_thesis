@@ -236,8 +236,8 @@ with case_description_container:
 st.divider()
 
 st.checkbox(
-    "Please verbally provide a lead diagnosis and a rationale as if you were "
-    "presenting your conclusions to a colleague familiar with the case.",
+    "Please verbally provide a lead suspect and a rationale as if you were presenting "
+    "your conclusions to a colleague with whom you have discussed the case.",
     key="concluded",
 )
 
