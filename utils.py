@@ -175,18 +175,18 @@ def get_ai_prompt(group: Group, case_description: str, hypotheses: list[str]) ->
         <CASE_DESCRIPTION>{case_description}</CASE_DESCRIPTION>
 
 
-        <DIAGNOSTIC_HYPOTHESIS>
+        <SUSPECT>
         {hypotheses[0]}
-        </DIAGNOSTIC_HYPOTHESIS>"""
+        </SUSPECT>"""
 
     if group is Group.RECOMMENDATIONS_DRIVEN:
         return f"""
         <CASE_DESCRIPTION>{case_description}</CASE_DESCRIPTION>
 
 
-        <DIAGNOSTIC_HYPOTHESES>
+        <SUSPECTS>
         {'\n'.join(hypotheses)}
-        </DIAGNOSTIC_HYPOTHESES>"""
+        </SUSPECTS>"""
 
     return ""
 
