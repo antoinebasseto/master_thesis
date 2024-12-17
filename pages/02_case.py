@@ -121,7 +121,16 @@ def display_hypothesis_input(group: Group, key: str):
 
 
 def on_hypotheses_change():
-    st.toast("Hypotheses updated!")
+    # Get the current hypotheses table from session state
+    hypotheses_table = st.session_state["hypotheses_table"]
+    
+    # Sort the added_rows if they exist
+    if "added_rows" in hypotheses_table and hypotheses_table["added_rows"]:
+        sorted_rows = sorted(hypotheses_table["added_rows"], key=lambda x: x["hypothesis"].lower())
+        hypotheses_table["added_rows"] = sorted_rows
+
+    #st.toast("Hypotheses updated!")
+    st.toast("Hypotheses updated and alphabetically sorted!")
 
 
 def display_ai_help(group: Group, case_description: str, hypotheses_table: dict):
@@ -179,7 +188,7 @@ def display_citations(citations: list[str]):
     st.caption(citations_string)
 
 
-@st.experimental_dialog("Are you done with the case?")  # type: ignore
+@st.experimental_dialog("Are you sure you want to move on to the next case?")  # type: ignore
 def dialog_case_done():
     if st.button("Yes", type="primary"):
 
@@ -213,11 +222,19 @@ col1, col2 = st.columns([0.3, 0.7])
 with col1:
     hypotheses_df = display_hypothesis_input(get_group(), key="hypotheses_table")
 with col2:
-    display_ai_help(
-        get_group(),
-        get_case_description(get_case_index()),
-        st.session_state["hypotheses_table"],
-    )
+    if get_group() is Group.RECOMMENDATIONS_DRIVEN:
+        if st.button("See AI Recommendations"): # only show recommendations when the button is pressed
+            display_ai_help(
+                get_group(),
+                get_case_description(get_case_index()),
+                st.session_state["hypotheses_table"],
+            )
+    else:
+        display_ai_help(
+            get_group(),
+            get_case_description(get_case_index()),
+            st.session_state["hypotheses_table"],
+        )
 
 # Because the case description depends on the AI message - because of
 # citations - we need to compute it after the AI message.

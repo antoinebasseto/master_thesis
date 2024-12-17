@@ -141,7 +141,7 @@ def parse_message(
                 parsed_message += f" :red-background[[{citations.index(c) + 1}]]"
             parsed_message += "\n\n"
 
-        parsed_message += f"**Evidence against {hypotheses[0]}**\n\n"
+        parsed_message += f"**Evidence against {selected_hypotheses[0]}**\n\n"
         for e in message_dict["evidence_against"]:
             parsed_message += f"- {e['claim']}"
             for c in e["citations"]:
@@ -242,8 +242,10 @@ Take your time to do the task correctly and think things through step by step.
 
 Answer using a JSON format.
 
+Case description:
 {case_description}
 
+Diagnostic hypotheses:
 {"\n".join(hypotheses)}
 """.strip()
 
@@ -272,8 +274,10 @@ Take your time to do the task correctly and think things through step by step.
 
 Answer using a JSON format.
 
+Case description:
 {case_description}
 
+Diagnostic hypotheses:
 {"\n".join(hypotheses)}
 """.strip()
 
@@ -298,7 +302,7 @@ def gen_json_schema_for_recommendation_driven() -> Dict[str, Any]:
             "properties": {
                 "rationale": {
                     "type": "string",
-                    "description": "Your rationale for the diagnosis you provided, citing the case description to support your claims.",
+                    "description": "Your rationale for the lead_diagnosis you selected, citing the case description to support your claims.",
                 },
                 "citations": {
                     "type": "array",
@@ -307,7 +311,7 @@ def gen_json_schema_for_recommendation_driven() -> Dict[str, Any]:
                 },
                 "lead_diagnosis": {
                     "type": "string",
-                    "description": "The diagnosis you believe is most likely based on the evidence presented.",
+                    "description": "The diagnosis you believe is most likely based on the evidence presented, strictly chosen from the list of hypotheses provided.",
                 },
             },
             "required": ["lead_diagnosis", "citations", "rationale"],
